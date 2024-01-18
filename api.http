@@ -1,0 +1,63 @@
+GET http://localhost:3000/acounts?password=Cubos123Bank
+
+
+###
+POST  http://localhost:3000/acounts
+Content-Type: application/json
+
+{
+  "name": "cliente teste",
+  "email": "teste@teste.com",
+"password": "@Teste123",
+"phone":"+55 (071) 9 9999-9999",
+"cpf": "57093208037",
+"birthDate": "2006-01-13"
+}
+
+###
+GET  http://localhost:3000/acounts/1
+
+
+###
+PATCH http://localhost:3000/acounts/1
+Content-Type: application/json
+
+{
+  "name": "cliente teste update",
+}
+
+###
+DELETE  http://localhost:3000/acounts/12
+
+###
+POST http://localhost:3000/transations/deposit
+Content-Type: application/json
+
+{
+  "numberAcount": "11",
+  "value": 10000
+}
+
+###
+POST http://localhost:3000/transations/withdraw
+Content-Type: application/json
+
+{
+  "numberAcount": "11",
+  "value": 10000,
+  "password": "@Teste123" 
+}
+
+###
+POST http://localhost:3000/transations/transfer
+Content-Type: application/json
+
+{
+  "acountDestiny":"12",
+  "acountOrigin":"11",
+  "value": 1000,
+  "password": "@Teste123" 
+}
+
+###
+GET http://localhost:3000/transations/extract?numberAcount=11&password=@Teste123&filters[]=withdraw

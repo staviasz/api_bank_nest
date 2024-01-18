@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Bank {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(100)
+  number String @db.VarChar(20)
+  agency String @db.VarChar(20)
+  password String @db.VarChar(255)
+  }
+
+model User {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(100)
+  cpf String @db.Char(11) @unique
+  phone String @db.VarChar(15)
+  email String @db.VarChar(255) @unique
+  password String @db.VarChar(255)
+  birthDate DateTime @db.Date()
+  acount Acount[]
+}
+
+model Acount {
+  id Int @id @default(autoincrement())
+  number String @db.VarChar(50)
+  balance Float @default(0)
+  userId Int 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  withdraw Withdraw[]
+  deposit Deposit[]
+  originTransfer Transfer[] @relation("originTransfer")
+  destinyTransfer Transfer[] @relation("destinyTransfer")
+}
+
+model Withdraw {
+  id Int @id @default(autoincrement())
+  date DateTime @default(now())
+  acountId Int
+  value Float
+  acount Acount @relation(fields: [acountId],references: [id])
+}
+
+model Deposit {
+  id Int @id @default(autoincrement())
+  date DateTime @default(now())
+  acountId Int
+  value Float 
+  acount Acount @relation(fields: [acountId],references: [id])
+}
+
+model Transfer {
+  id Int @id @default(autoincrement())
+  date DateTime @default(now())
+  originAcountId Int
+  destinyAcountId Int
+  value Float 
+  originAcount Acount @relation("originTransfer",fields: [originAcountId],references: [id])
+  destinyAcount Acount @relation("destinyTransfer",fields: [destinyAcountId],references: [id])
+}
